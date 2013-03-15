@@ -1,0 +1,22 @@
+require "ruby-ois"
+require "ruby-ogre"
+require_relative "../../../lib/ruby-procedural.rb"
+
+
+SWIG = 'swig'
+SWIGFLAGS = "-ruby -c++ #{Ruby::Ogre::get_inc_flags} #{Ruby::Procedural::get_inc_flags} -I#{Ruby::Ogre::get_top_path}/bindings/ogre/interface/ -autorename"
+
+TARGET = 'procedural_wrap.cpp'
+
+#puts SWIGFLAGS
+
+task :default => "#{TARGET}"
+
+file "#{TARGET}" => "procedural.i" do |t|
+  sh "#{SWIG} #{SWIGFLAGS} -o  #{t.name} #{t.prerequisites[0]}"
+end
+
+task :clean do
+  sh "rm -f #{TARGET}"
+end
+
